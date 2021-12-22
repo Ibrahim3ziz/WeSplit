@@ -13,7 +13,6 @@ struct ContentView: View {
     @State private var tipPrecentage = 20
 //  @FocusState var amountIsFocused: Bool
     
-    let tipPrecentages = [10, 15, 20, 25, 0]
     
     var totalPerPerson: Double {
         
@@ -27,12 +26,29 @@ struct ContentView: View {
         return amountPerPerson
     }
     
+    var checkAmountAndtipValue: Double {
+        let tipSelection = Double(tipPrecentage)
+        let tipValue = Double(checkAmount)! / 100 * tipSelection
+
+        return Double(checkAmount)! + Double(tipValue)
+    }
+    
+
+//    var currencyFormat: NumberFormatter {
+//        let format = NumberFormatter()
+//        format.numberStyle = .currency
+//        format.currencyCode = Locale.current.currencyCode ?? "USD"
+//        return format
+//    }
+    
+    
     
     var body: some View {
         NavigationView {
             Form {
                 Section {
                     //need to be updated
+//                    TextField("Amount", value: $checkAmount, formatter: currencyFormat)
                     TextField("Amount", text: $checkAmount)
                         .keyboardType(.decimalPad)
 //                        .focused($amountIsFocused)
@@ -47,16 +63,18 @@ struct ContentView: View {
                 // need to be updated
                 Section(header: Text("Add a tip ?")) {
                     Picker("Tip Percentage", selection: $tipPrecentage) {
-                        ForEach(tipPrecentages, id: \.self) {
+                        ForEach(0..<101, id: \.self) {
                             Text("\($0)%")
                         }
                     }
-                    //nedd to be updated
-                    .pickerStyle(SegmentedPickerStyle())
                 }
                 
-                Section {
+                Section(header: Text("Amount per person:")) {
                     Text("\(totalPerPerson)")
+                }
+                
+                Section(header: Text("Total Check:")) {
+                    Text("\(checkAmountAndtipValue)")
                 }
             }
             .navigationTitle("WeSplit")
